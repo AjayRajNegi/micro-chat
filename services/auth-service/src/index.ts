@@ -1,7 +1,7 @@
 import { createServer } from "http";
-import { createApp } from "./app";
-import { env } from "./config/env";
-import { logger } from "./utils/logger";
+import { createApp } from "./app.js";
+import { env } from "./config/env.js";
+import { logger } from "./utils/logger.js";
 
 const main = async () => {
   try {
