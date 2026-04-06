@@ -1,0 +1,23 @@
+services:
+  auth-db:
+    image: mysql:8.0
+    container_name: micro-chat-auth-db
+    environment:
+      MYSQL_DATABASE: ${AUTH_DB_NAME:-micro-chat_auth_service}
+      MYSQL_USER: ${AUTH_DB_USER:-micro-chat_auth_user}
+      MYSQL_PASSWORD: ${AUTH_DB_PASSWORD:-micro-chat_auth_password}
+      MYSQL_ROOT_PASSWORD: ${AUTH_DB_ROOT_PASSWORD:-root_password}
+    command: ["mysqld", "--default-authentication-plugin=mysql_native_password"]
+    ports:
+      - "${AUTH_DB_PORT:-3306}:3306"
+    volumes:
+      - auth-db-data:/var/lib/mysql
+    networks:
+      - micro-chat-network
+
+volumes:
+  auth-db-data:
+
+networks:
+  micro-chat-network:
+    driver: bridge
