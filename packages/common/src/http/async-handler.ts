@@ -1,5 +1,7 @@
 import type { NextFunction, Request, RequestHandler, Response } from 'express';
 
+type ErrorForwarder = (error: Error) => void;
+
 export type AsyncHandler = (req: Request, res: Response, next: NextFunction) => Promise<unknown>;
 
 const toError = (error: unknown): Error => {
@@ -9,8 +11,6 @@ const toError = (error: unknown): Error => {
 const forwardError = (nextFn: ErrorForwarder, error: unknown) => {
   nextFn(toError(error));
 };
-
-type ErrorForwarder = (error: Error) => void;
 
 export const asyncHandler = (handler: AsyncHandler): RequestHandler => {
   return (req, res, next) => {
