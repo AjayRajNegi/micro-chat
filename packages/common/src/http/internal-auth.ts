@@ -28,5 +28,7 @@ export const createInternalAuthMiddleware = (
       next(new HttpError(401, 'Unauthorized'));
       return;
     }
+
+    next();
   };
 };
