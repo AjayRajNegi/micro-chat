@@ -4,6 +4,7 @@ import { UserCredentials } from '@/models/user-credentials.model.js';
 import { AuthResponse, RegisterInput } from '@/types/auth.js';
 import { hashPassword, signAccessToken, signRefreshToken } from '@/utils/token.js';
 import { HttpError } from '@micro-chat/common';
+import { randomUUID } from 'node:crypto';
 import { Op, Transaction } from 'sequelize';
 
 const REFRESH_TOKEN_TTL_DAYS = 30;
@@ -58,7 +59,7 @@ export const register = async (input: RegisterInput): Promise<AuthResponse> => {
 const createRefreshToken = async (userId: string, transaction?: Transaction) => {
   const expiresAt = new Date();
   expiresAt.setDate(expiresAt.getDate() + REFRESH_TOKEN_TTL_DAYS);
-  const tokenId = crypto.randomUUID();
+  const tokenId = randomUUID();
 
   const record = await RefreshToken.create(
     {
