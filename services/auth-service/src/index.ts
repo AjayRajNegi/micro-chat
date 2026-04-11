@@ -1,40 +1,42 @@
-import { createServer } from "http";
-import { createApp } from "./app.js";
-import { env } from "./config/env.js";
-import { logger } from "./utils/logger.js";
-import { closeDatabase, connectToDatabase } from "./db/sequelize.js";
-import { initModels } from "./models/index.js";
+import { createServer } from 'http';
+import { createApp } from './app.js';
+import { env } from './config/env.js';
+import { logger } from './utils/logger.js';
+import { closeDatabase, connectToDatabase } from './db/sequelize.js';
+import { initModels } from './models/index.js';
+import { closePublisher, initPublisher } from './messaging/event-publishing.js';
 
 const main = async () => {
   try {
     await connectToDatabase();
     await initModels();
+    await initPublisher();
 
     const app = createApp();
     const server = createServer(app);
     const port = env.AUTH_SERVICE_PORT;
 
     server.listen(port, () => {
-      logger.info({ port }, "Auth service is running.");
+      logger.info({ port }, 'Auth service is running.');
     });
 
     // Graceful shutdown
     const shutdown = () => {
-      logger.info("Shutting down auth service...");
+      logger.info('Shutting down auth service...');
 
-      Promise.all([closeDatabase()])
+      Promise.all([closeDatabase(), closePublisher()])
         .catch((error: unknown) => {
-          logger.error({ error }, "Error during shutdown tasks.");
+          logger.error({ error }, 'Error during shutdown tasks.');
         })
         .finally(() => {
           server.close(() => process.exit(0));
         });
     };
 
-    process.on("SIGINT", shutdown);
-    process.on("SIGTERM", shutdown);
+    process.on('SIGINT', shutdown);
+    process.on('SIGTERM', shutdown);
   } catch (error) {
-    logger.error({ error }, "Failed to start auth service.");
+    logger.error({ error }, 'Failed to start auth service.');
     process.exit(1);
   }
 };
