@@ -1,3 +1,5 @@
+//Checks for token to access certain paths
+
 import { HttpError } from '../errors/http-error.js';
 import type { RequestHandler } from 'express';
 

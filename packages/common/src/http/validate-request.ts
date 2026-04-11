@@ -1,6 +1,8 @@
+//Validating the scheama each request which include body, params and query
+
 import { HttpError } from '../errors/http-error.js';
 import type { NextFunction, Request, Response } from 'express';
-import { ZodObject, ZodError, ZodTypeAny } from 'zod';
+import { ZodError, ZodTypeAny } from 'zod';
 
 type Schema = ZodTypeAny;
 type ParamsRecord = Record<string, string>;

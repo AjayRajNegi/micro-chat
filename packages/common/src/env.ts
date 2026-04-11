@@ -1,17 +1,19 @@
-import type { ZodObject, ZodRawShape } from "zod";
+// Safely parse the environment varaibles of all packages against their schema to check for errors
+
+import type { ZodObject, ZodRawShape } from 'zod';
 
 interface EnvOptions {
   source?: NodeJS.ProcessEnv;
   serviceName?: string;
 }
 
-type SchemaOutput<TSchema extends ZodRawShape> = ZodObject<TSchema>["_output"];
+type SchemaOutput<TSchema extends ZodRawShape> = ZodObject<TSchema>['_output'];
 
 export const createEnv = <TSchema extends ZodRawShape>(
   schema: ZodObject<TSchema>,
   options: EnvOptions = {},
 ): SchemaOutput<TSchema> => {
-  const { source = process.env, serviceName = "services" } = options;
+  const { source = process.env, serviceName = 'services' } = options;
 
   const parsed = schema.safeParse(source);
   if (!parsed.success) {

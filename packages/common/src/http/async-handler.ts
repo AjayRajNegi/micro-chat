@@ -1,3 +1,6 @@
+//Handles async errors for Express
+//Takes an async function and catches the error and forwards it to next(error) (express way of handling errors)
+
 import type { NextFunction, Request, RequestHandler, Response } from 'express';
 
 type ErrorForwarder = (error: Error) => void;

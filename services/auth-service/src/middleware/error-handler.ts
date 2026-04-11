@@ -2,7 +2,7 @@ import { HttpError } from '@micro-chat/common';
 import type { ErrorRequestHandler } from 'express';
 import { logger } from '../utils/logger.js';
 
-export const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
+export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   logger.error({ err }, 'Unhandled error occurred.');
 
   const error = err instanceof HttpError ? err : undefined;
