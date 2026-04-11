@@ -1,4 +1,5 @@
 import { sequelize } from '@/db/sequelize.js';
+import { publishUserRegistered } from '@/messaging/event-publishing.js';
 import { RefreshToken } from '@/models/refresh-token.model.js';
 import { UserCredentials } from '@/models/user-credentials.model.js';
 import { AuthResponse, RegisterInput } from '@/types/auth.js';
@@ -44,6 +45,8 @@ export const register = async (input: RegisterInput): Promise<AuthResponse> => {
       displayName: user.displayName,
       createdAt: user.createdAt.toISOString(),
     };
+
+    publishUserRegistered(userData);
 
     return {
       accessToken,
