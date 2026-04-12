@@ -11,6 +11,20 @@ services:
     networks:
       - micro-chat-network
 
+  user-db:
+    image: postgres:16
+    container_name: micro-chat-user-db
+    environment:
+      POSTGRES_DB: ${USER_DB_NAME:-micro-chat_user_service}
+      POSTGRES_USER: ${USER_DB_USER:-micro-chat_user}
+      POSTGRES_PASSWORD: ${USER_DB_PASSWORD:-micro-chat_password}
+    ports:
+      - '${USER_DB_PORT:-5432}:5432'
+    volumes:
+      - user-db-data:/var/lib/postgresql/data
+    networks:
+      - micro-chat-network
+
   auth-db:
     image: mysql:8.0
     container_name: micro-chat-auth-db
@@ -28,6 +42,7 @@ services:
       - micro-chat-network
 
 volumes:
+  user-db-data:
   auth-db-data:
 
 networks:
