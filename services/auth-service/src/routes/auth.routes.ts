@@ -1,8 +1,16 @@
-import { registerHandler } from '@/controllers/auth.controllers.js';
+import {
+  loginHandler,
+  refreshHandler,
+  registerHandler,
+  revokeHandler,
+} from '@/controllers/auth.controllers.js';
 import { validateRequest } from '@micro-chat/common';
 import { Router } from 'express';
-import { registerSchema } from './auth.schema.js';
+import { loginSchema, refreshSchema, registerSchema, revokeSchema } from './auth.schema.js';
 
 export const authRouter: Router = Router();
 
 authRouter.post('/register', validateRequest({ body: registerSchema.shape.body }), registerHandler);
+authRouter.post('/login', validateRequest({ body: loginSchema.shape.body }), loginHandler);
+authRouter.post('/refresh', validateRequest({ body: refreshSchema.shape.body }), refreshHandler);
+authRouter.post('/revoke', validateRequest({ body: revokeSchema.shape.body }), revokeHandler);

@@ -1,6 +1,7 @@
+import axios from 'axios';
+
 import { env } from '@/config/env';
 import { HttpError } from '@micro-chat/common';
-import axios from 'axios';
 
 const client = axios.create({
   baseURL: env.AUTH_SERVICE_URL,
@@ -76,6 +77,32 @@ export const authProxyService = {
     try {
       const response = await client.post<AuthResponse>('/auth/register', payload, authHeader);
       return response.data;
+    } catch (error) {
+      return handleAxiosError(error);
+    }
+  },
+
+  async login(payload: LoginPayload): Promise<AuthTokens> {
+    try {
+      const response = await client.post<AuthTokens>('/auth/login', payload, authHeader);
+      return response.data;
+    } catch (error) {
+      return handleAxiosError(error);
+    }
+  },
+
+  async refresh(payload: RefreshPayload): Promise<AuthTokens> {
+    try {
+      const response = await client.post<AuthTokens>('/auth/refresh', payload, authHeader);
+      return response.data;
+    } catch (error) {
+      return handleAxiosError(error);
+    }
+  },
+
+  async revoke(payload: RevokePayload): Promise<void> {
+    try {
+      await client.post<void>('/auth/revoke', payload, authHeader);
     } catch (error) {
       return handleAxiosError(error);
     }
