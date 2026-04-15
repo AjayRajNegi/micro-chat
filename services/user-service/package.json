@@ -21,6 +21,8 @@
   "packageManager": "pnpm@10.33.0",
   "dependencies": {
     "@micro-chat/common": "workspace:^",
+    "@types/amqplib": "^0.10.8",
+    "amqplib": "^1.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.0",
     "express": "^5.2.1",
