@@ -4,10 +4,12 @@ import { env } from './config/env.js';
 import { logger } from './utils/logger.js';
 import { initializeDatabase } from './db/sequelize.js';
 import { startAuthEventConsumer } from './messaging/auth-consumer.js';
+import { initMessaging } from './messaging/event-publisher.js';
 
 const main = async () => {
   try {
     await initializeDatabase();
+    await initMessaging();
     await startAuthEventConsumer();
 
     const app = createApp();

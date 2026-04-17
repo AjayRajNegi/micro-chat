@@ -1,3 +1,4 @@
+import { publishUserCreatedEvent } from '@/messaging/event-publisher.js';
 import { userRepository, UserRepository } from '@/repositories/user.repositories.js';
 import { CreateUserInput, User } from '@/types/user.js';
 import { AuthUserRegisteredPayload, HttpError } from '@micro-chat/common';
@@ -70,12 +71,3 @@ class UserService {
 }
 
 export const userService = new UserService(userRepository);
-function publishUserCreatedEvent(arg0: {
-  id: string;
-  email: string;
-  displayName: string;
-  createdAt: string;
-  updatedAt: string;
-}) {
-  throw new Error('Function not implemented.');
-}
