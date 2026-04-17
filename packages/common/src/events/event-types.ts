@@ -3,11 +3,11 @@ export type EventPayload = Record<string, unknown>;
 export interface DomainEvent<TType extends string, TPayload extends EventPayload> {
   type: TType;
   payload: TPayload;
-  occuredAt: string;
+  occurredAt: string;
 }
 
 export interface EventMetadata {
-  coorelationId?: string;
+  correlationId?: string;
   causationId?: string;
   version?: number;
 }
@@ -19,7 +19,7 @@ export interface OutboundEvent<
   metadata?: EventMetadata;
 }
 
-export interface InboundEvent<
+export interface InBoundEvent<
   TType extends string,
   TPayload extends EventPayload,
 > extends DomainEvent<TType, TPayload> {
