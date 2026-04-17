@@ -1,5 +1,6 @@
 export * from './env.js';
 export * from './logger.js';
+export * from './http/auth.js';
 export * from './errors/http-error.js';
 export * from './events/auth-event.js';
 export * from './events/user-event.js';
