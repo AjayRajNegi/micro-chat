@@ -1,5 +1,5 @@
 services:
-  rabbitma:
+  rabbitmq:
     image: rabbitmq:3-management
     container_name: micro-chat-rabbitmq
     ports:
@@ -8,6 +8,19 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-guest}
+    networks:
+      - micro-chat-network
+
+  mongo:
+    image: mongo:6.0
+    container_name: micro-chat-mongo
+    ports:
+      - '${MONGO_PORT:-27017}:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-password}
+    volumes:
+      - mongo-data:/data/db
     networks:
       - micro-chat-network
 
@@ -43,6 +56,7 @@ services:
 
 volumes:
   user-db-data:
+  mongo-data:
   auth-db-data:
 
 networks:
