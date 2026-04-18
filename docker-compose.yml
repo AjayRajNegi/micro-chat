@@ -24,6 +24,14 @@ services:
     networks:
       - micro-chat-network
 
+  redis:
+    image: redis:7
+    container_name: micro-chat-redis
+    ports:
+      - '${REDIS_PORT:-6379}:6379'
+    networks:
+      - micro-chat-network
+
   user-db:
     image: postgres:16
     container_name: micro-chat-user-db
