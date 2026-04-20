@@ -1,5 +1,4 @@
-import Redis from 'ioredis';
-
+import { Redis } from 'ioredis';
 import { env } from '../config/env.js';
 import { logger } from '../utils/logger.js';
 
@@ -9,7 +8,7 @@ export const getRedisClient = (): Redis => {
   if (!redis) {
     redis = new Redis(env.REDIS_URL, { lazyConnect: true });
 
-    redis.on('error', (error) => {
+    redis.on('error', (error: any) => {
       logger.error({ err: error }, 'Redis connection error');
     });
 
@@ -26,9 +25,8 @@ export const getRedisClient = (): Redis => {
     });
   }
 
-  return redis;
+  return redis!;
 };
-
 export const connectRedis = async () => {
   const client = getRedisClient();
   if (client.status === 'ready' || client.status === 'connecting') {
