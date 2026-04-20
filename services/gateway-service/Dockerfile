@@ -1,6 +1,9 @@
 # syntax=docker/dockerfile:1
+
+
 FROM node:22-alpine AS base
 
+# Install pnpm
 RUN corepack enable && corepack prepare pnpm@10.14.0 --activate
 
 WORKDIR /app
@@ -13,7 +16,7 @@ COPY tsconfig.base.json tsconfig.json ./
 
 # Copy package/json file for all needed packages
 COPY packages/common/package.json ./packages/common/
-COPY services/auth-service/package.json ./services/auth-service/
+COPY services/gateway-service/package.json ./services/gateway-service/
 
 #Install Dependencies
 RUN pnpm install --frozen-lockfile
@@ -23,13 +26,13 @@ FROM deps AS builder
 
 # Copy source code
 COPY packages/common ./packages/common
-COPY services/auth-service ./services/auth-service
+COPY services/gateway-service ./services/gateway-service
 
 #Build commong packge first
 RUN pnpm --filter @micro-chat/common build
 
 #Build auth-service
-RUN pnpm --filter auth-service build
+RUN pnpm --filter gateway-service build
 
 
 FROM node:22-alpine AS production
@@ -49,7 +52,7 @@ COPY tsconfig.base.json ./
 
 # Copy package.json files
 COPY packages/common/package.json ./packages/common/
-COPY services/auth-service/package.json ./services/auth-service/
+COPY services/gateway-service/package.json ./services/gateway-service/
 
 
 # Install production dependencies only
@@ -57,7 +60,7 @@ RUN pnpm install --frozen-lockfile --prod
 
 # Copy built artifcats from builder
 COPY --from=builder /app/packages/common/dist ./packages/common/dist
-COPY --from=builder /app/services/auth-service/dist ./services/auth-service/dist
+COPY --from=builder /app/services/gateway-service/dist ./services/gateway-service/dist
 
 # Change ownership to non(root)
 RUN chown -R nodeuser:nodejs /app
@@ -65,10 +68,10 @@ RUN chown -R nodeuser:nodejs /app
 USER nodeuser
 
 ENV NODE_ENV=production
-ENV AUTH_SERVICE_PORT=4003
+ENV GATEWAY_PORT=4000
 
-EXPOSE 4003
+EXPOSE 4000
 
-WORKDIR /app/services/auth-service
+WORKDIR /app/services/gateway-service
 
 CMD [ "node", "dist/index.js" ]

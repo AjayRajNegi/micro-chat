@@ -16,9 +16,14 @@ export const createApp = (): Application => {
       credentials: true,
     }),
   );
+
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
-  app.use(createInternalAuthMiddleware(env.INTERNAL_API_TOKEN));
+  app.use(
+    createInternalAuthMiddleware(env.INTERNAL_API_TOKEN, {
+      exemptPaths: ['/health'],
+    }),
+  );
 
   registerRoutes(app);
 
@@ -27,5 +32,6 @@ export const createApp = (): Application => {
   });
 
   app.use(errorHandler);
+
   return app;
 };
